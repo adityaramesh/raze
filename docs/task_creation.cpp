@@ -7,29 +7,35 @@
 
 int main()
 {
-	// problem 1: come up with the right set of operator overloads to make
-	// this work for lambdas, function objects, and function pointers.
-
-	// problem 2: DFS vs BFS execution. Perhaps use the scheduler along with
-	// the visitor pattern so that the scheduler can apply a predetermined
-	// policy the schedule the task tree itself.
+	/*
+	** Option 2. The desired type of resource management is declared at the
+	** outermost scope, as it should be. We don't need to resort to
+	** unreliable hacks in order to allocate the task.
+	*/
 	auto t = make_scoped(
-		[] (auto x) {
+		task(
+			[] (auto x) {
 
-		} | options,
+			}, token,
+			then(
+				[] (auto x) {
+
+				}, options,
+				[] (auto x) {
+
+				}, options,
+				[] (auto x) {
+
+				}, on_termination, options
+			),
+			[] (auto x) {
+
+			}, token
+		),
 		then(
 			[] (auto x) {
-
-			} | options,
-			[] (auto x) {
-
-			} | options,
-			[] (auto x) {
-
-			} | on_termination | options
-		),
-		[] (auto x) {
-
-		} | on_termination
+				//
+			}
+		)
 	);
 }
