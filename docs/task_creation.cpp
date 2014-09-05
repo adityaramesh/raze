@@ -43,8 +43,7 @@ int main()
 		),
 		then(
 			[] (auto x) {
-				auto& r1 = leaf<1>(x.owned()).result();
-				auto& r2 = leaf<2>(x.owned()).result();
+
 			}, token, on_termination
 		)
 	);
