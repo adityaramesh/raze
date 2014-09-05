@@ -8,16 +8,25 @@
 int main()
 {
 	/*
-	** mutable_task_node
-	** task_node
-	** mutable_task_group
-	** task_group
-	**
-	** A group encapsulates a forest of task nodes or task groups into a
-	** higher-level group that can be used to express task relationships in
-	** broader scopes.
+	** Task tree.
 	*/
+	auto t = make_scoped(
+		[] (auto x) {
 
+		}, token,
+		then(
+			[] (auto x) {
+
+			}, options,
+			[] (auto x) {
+
+			}, on_termination, options
+		)
+	);
+
+	/*
+	** Task tree with continuation.
+	*/
 	auto t = make_scoped(
 		group(
 			[] (auto x) {
@@ -29,18 +38,46 @@ int main()
 				}, options,
 				[] (auto x) {
 
-				}, options,
-				[] (auto x) {
-
 				}, on_termination, options
-			),
-			[] (auto x) {
-
-			}, token
+			)
 		),
 		then(
 			[] (auto x) {
-				//
+				auto& r1 = leaf<1>(x.owned()).result();
+				auto& r2 = leaf<2>(x.owned()).result();
+			}, token, on_termination
+		)
+	);
+
+	/*
+	** Logical task expressions.
+	*/
+	auto t = make_scoped(
+		group(
+			[] (auto x) {
+				// A
+			}, token,
+			then(
+				[] (auto x) {
+					// B
+				}, options,
+				[] (auto x) {
+					// C
+				}, on_termination, options
+			)
+		),
+		then(
+			[] (auto x) {
+				// D
+			}, token,
+			[] (auto x) {
+				// E
+			}, token
+		),
+		(_1->_2->_1 && _2->_2)(
+			[] (auto x) {
+				// Runs after both tasks B and E complete
+				// successfully.
 			}
 		)
 	);
