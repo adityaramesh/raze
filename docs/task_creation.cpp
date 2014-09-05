@@ -8,12 +8,18 @@
 int main()
 {
 	/*
-	** Option 2. The desired type of resource management is declared at the
-	** outermost scope, as it should be. We don't need to resort to
-	** unreliable hacks in order to allocate the task.
+	** mutable_task_node
+	** task_node
+	** mutable_task_group
+	** task_group
+	**
+	** A group encapsulates a forest of task nodes or task groups into a
+	** higher-level group that can be used to express task relationships in
+	** broader scopes.
 	*/
+
 	auto t = make_scoped(
-		task(
+		group(
 			[] (auto x) {
 
 			}, token,
