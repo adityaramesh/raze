@@ -49,18 +49,20 @@ int main()
 	);
 
 	/*
-	** Logical task expressions.
+	** Logical task expressions. Reasoning behind supporting usage of tags
+	** instead of addressing nodes via paths:
+	**   - Paths can change easily due to changes in the source code.
+	**   - IDs are much more concise.
 	*/
 	auto t = make_scoped(
-		group(
-			"A"_tag,
+		group<0>(
 			[] (auto x) {
 				// A
 			}, make_options(token),
 			then(
 				[] (auto x) {
 					// B
-				}, make_options("B"_tag),
+				}, make_options(1_id),
 				[] (auto x) {
 					// C
 				}, make_options(on_termination)
@@ -72,9 +74,9 @@ int main()
 			}, make_options(token),
 			[] (auto x) {
 				// E
-			}, make_options(token, "E"_tag)
+			}, make_options(token, 2_id)
 		),
-		("B"_tag && "E"_tag)(
+		(1_id && 2_id)(
 			[](auto x) {
 				// Runs after both tasks B and E complete
 				// successfully.
