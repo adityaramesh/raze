@@ -62,7 +62,7 @@ int main()
 			then(
 				[] (auto x) {
 					// B
-				}, make_options(1_id),
+				}, make_options("B"_id),
 				[] (auto x) {
 					// C
 				}, make_options(on_termination)
@@ -74,9 +74,9 @@ int main()
 			}, make_options(token),
 			[] (auto x) {
 				// E
-			}, make_options(token, 2_id)
+			}, make_options(token, "E"_id)
 		),
-		(1_id && 2_id)(
+		("B"_id && "E"_id)(
 			[](auto x) {
 				// Runs after both tasks B and E complete
 				// successfully.
