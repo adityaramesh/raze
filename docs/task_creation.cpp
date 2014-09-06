@@ -13,14 +13,14 @@ int main()
 	auto t = make_scoped(
 		[] (auto x) {
 
-		}, token,
+		}, make_options(token),
 		then(
 			[] (auto x) {
 
 			}, options,
 			[] (auto x) {
 
-			}, on_termination, options
+			}, make_options(on_termination)
 		)
 	);
 
@@ -31,20 +31,20 @@ int main()
 		group(
 			[] (auto x) {
 
-			}, token,
+			}, make_options(token),
 			then(
 				[] (auto x) {
 
 				}, options,
 				[] (auto x) {
 
-				}, on_termination, options
+				}, make_options(on_termination)
 			)
 		),
 		then(
 			[] (auto x) {
 
-			}, token, on_termination
+			}, make_options(token, on_termination)
 		)
 	);
 
@@ -53,28 +53,29 @@ int main()
 	*/
 	auto t = make_scoped(
 		group(
+			"A"_tag,
 			[] (auto x) {
 				// A
-			}, token,
+			}, make_options(token),
 			then(
 				[] (auto x) {
 					// B
-				}, options,
+				}, make_options("B"_tag),
 				[] (auto x) {
 					// C
-				}, on_termination, options
+				}, make_options(on_termination)
 			)
 		),
 		then(
 			[] (auto x) {
 				// D
-			}, token,
+			}, make_options(token),
 			[] (auto x) {
 				// E
-			}, token
+			}, make_options(token, "E"_tag)
 		),
-		(_1->_2->_1 && _2->_2)(
-			[] (auto x) {
+		("B"_tag && "E"_tag)(
+			[](auto x) {
 				// Runs after both tasks B and E complete
 				// successfully.
 			}
