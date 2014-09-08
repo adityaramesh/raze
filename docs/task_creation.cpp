@@ -55,7 +55,8 @@ int main()
 	**   - IDs are much more concise.
 	*/
 	auto t = make_scoped(
-		group<0>(
+		group(
+			"A"_id,
 			[] (auto x) {
 				// A
 			}, make_options(token),
